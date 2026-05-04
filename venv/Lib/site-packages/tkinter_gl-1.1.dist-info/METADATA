@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: tkinter-gl
+Version: 1.1
+Summary: A base class for GL rendering surfaces in tkinter.
+Author-email: Marc Culler <culler@users.noreply.github.com>, "Nathan M. Dunfield" <nathan@dunfield.info>, Matthias Görner <enischte@gmail.com>
+Maintainer-email: Marc Culler <culler@users.noreply.github.com>, "Nathan M. Dunfield" <nathan@dunfield.info>, Matthias Görner <enischte@gmail.com>
+License-Expression: GPL-2.0-or-later
+Project-URL: Homepage, https://github.com/3-manifolds/tkinter_gl
+Project-URL: Bug Tracker, https://github.com/3-manifolds/tkinter_gl/issues
+Keywords: OpenGL,tkinter,rendering
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Software Development :: Widget Sets
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Dynamic: license-file
+
+tkinter_gl
+==========
+
+This Python package provides the tkinter widget class GLCanvas which
+can serve as a rendering surface for an OpenGL client.
+
+The responsibility of this class is only to manage an OpenGL context.
+
+Clients need some other library such as PyOpenGL to make the OpenGL
+calls from python.
