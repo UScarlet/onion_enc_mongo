@@ -1,3 +1,0 @@
-"""
-Code for cusp neighborhoods.
-"""
