@@ -1,8 +1,8 @@
 import logging
 
-from wire import read_int32, OP_MSG, OP_COMPRESSED
-from compression import unpack_op_compressed
-from op_msg import parse_op_msg
+from protocol.wire import read_int32, OP_MSG, OP_COMPRESSED
+from protocol.compression import unpack_op_compressed
+from protocol.op_msg import parse_op_msg
 
 logger = logging.getLogger("MongoProxy")
 
@@ -18,9 +18,9 @@ INSPECTOR_MODE = "summary"
 
 
 if INSPECTOR_MODE == "verbose":
-    from big_inspector import summarize_parsed_op_msg
+    from logging_tools.big_inspector import summarize_parsed_op_msg
 elif INSPECTOR_MODE == "summary":
-    from small_inspector import summarize_parsed_op_msg
+    from logging_tools.small_inspector import summarize_parsed_op_msg
 else:
     raise ValueError(
         f"Unknown INSPECTOR_MODE={INSPECTOR_MODE!r}. "

@@ -1,9 +1,9 @@
 import asyncio
 import logging
 
-from wire import read_full_message, ProtocolError
-from inspection import inspect_message
-from transformer import transform_message
+from protocol.wire import read_full_message, ProtocolError
+from logging_tools.inspection import inspect_message
+from transform.transformer import transform_message
 
 logger = logging.getLogger("MongoProxy")
 

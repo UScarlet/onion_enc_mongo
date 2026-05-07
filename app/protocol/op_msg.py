@@ -3,7 +3,7 @@ from typing import Optional
 
 from bson import decode
 
-from wire import (
+from protocol.wire import (
     MSG_HEADER_SIZE,
     OP_MSG,
     FLAG_CHECKSUM_PRESENT,

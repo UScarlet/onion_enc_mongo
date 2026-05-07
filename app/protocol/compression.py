@@ -3,7 +3,7 @@ import zlib
 import snappy
 import zstd
 
-from wire import (
+from protocol.wire import (
     MSG_HEADER_SIZE,
     OP_COMPRESSED,
     ProtocolError,

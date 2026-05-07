@@ -1,0 +1,66 @@
+$dirs = @(
+    "app",
+    "app\proxy",
+    "app\protocol",
+    "app\inspect",
+    "app\transform",
+    "app\crypto",
+    "scripts",
+    "docs",
+    "tests"
+)
+
+foreach ($dir in $dirs) {
+    if (-not (Test-Path $dir)) {
+        New-Item -ItemType Directory -Path $dir | Out-Null
+    }
+}
+
+$initFiles = @(
+    "app\__init__.py",
+    "app\proxy\__init__.py",
+    "app\protocol\__init__.py",
+    "app\inspect\__init__.py",
+    "app\transform\__init__.py",
+    "app\crypto\__init__.py"
+)
+
+foreach ($file in $initFiles) {
+    if (-not (Test-Path $file)) {
+        New-Item -ItemType File -Path $file | Out-Null
+    }
+}
+
+$moveMap = @{
+    "main.py"                      = "app\main.py"
+    "config.py"                    = "app\config.py"
+    "proxy.py"                     = "app\proxy\proxy.py"
+    "wire.py"                      = "app\protocol\wire.py"
+    "op_msg.py"                    = "app\protocol\op_msg.py"
+    "compression.py"               = "app\protocol\compression.py"
+    "inspection.py"                = "app\inspect\inspection.py"
+    "big_inspector.py"             = "app\inspect\big_inspector.py"
+    "small_inspector.py"           = "app\inspect\small_inspector.py"
+    "transformer.py"               = "app\transform\transformer.py"
+    "field_policy.py"              = "app\transform\field_policy.py"
+    "create_field_with_policy.py"  = "app\transform\create_field_with_policy.py"
+    "check.py"                     = "scripts\check.py"
+    "README_mongo_proxy.md"        = "docs\README_mongo_proxy.md"
+}
+
+foreach ($src in $moveMap.Keys) {
+    $dst = $moveMap[$src]
+    if (Test-Path $src) {
+        Move-Item -Path $src -Destination $dst -Force
+    }
+}
+
+if (-not (Test-Path "app\crypto\crypto_det.py")) {
+    New-Item -ItemType File -Path "app\crypto\crypto_det.py" | Out-Null
+}
+
+if (-not (Test-Path "tests\.gitkeep")) {
+    New-Item -ItemType File -Path "tests\.gitkeep" | Out-Null
+}
+
+Write-Host "Done. Project structure created."

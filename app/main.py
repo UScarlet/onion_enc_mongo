@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from proxy import MongoProxy
+from proxy.proxy import MongoProxy
 
 logging.basicConfig(
     level=logging.INFO,

@@ -4,9 +4,7 @@ import logging
 from pprint import pformat
 from bson import BSON
 
-from wire import read_int32, OP_MSG, OP_COMPRESSED
-from compression import unpack_op_compressed
-from op_msg import parse_op_msg, get_command_name
+from protocol.op_msg import get_command_name
 
 logger = logging.getLogger("MongoProxy")
 

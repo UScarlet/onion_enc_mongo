@@ -1,9 +1,8 @@
-from op_msg import get_command_name
-from big_inspector import (
+from protocol.op_msg import get_command_name
+from logging_tools.big_inspector import (
     _get_body_doc,
     _get_sequence_docs,
-    )
-
+)
 
 # ============================================================
 # Вспомогательное

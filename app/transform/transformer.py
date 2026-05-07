@@ -3,24 +3,24 @@ from typing import Tuple
 
 from bson import decode, encode
 
-from inspection import (
+from logging_tools.inspection import (
     ENABLE_DEMO_REWRITE,
     DEMO_REWRITE_FIELD,
     DEMO_REWRITE_FROM,
     DEMO_REWRITE_TO,
 )
-from wire import read_int32, OP_MSG, OP_COMPRESSED, FLAG_CHECKSUM_PRESENT
-from compression import (
+from protocol.wire import read_int32, OP_MSG, OP_COMPRESSED, FLAG_CHECKSUM_PRESENT
+from protocol.compression import (
     parse_op_compressed_wrapper,
     unpack_op_compressed,
     pack_op_compressed,
 )
-from op_msg import (
+from protocol.op_msg import (
     parse_op_msg,
     build_op_msg,
     get_first_document,
 )
-from inspection import summarize_parsed_op_msg
+from logging_tools.inspection import summarize_parsed_op_msg
 
 logger = logging.getLogger("MongoProxy")
 
