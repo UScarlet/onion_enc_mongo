@@ -3,19 +3,9 @@ import logging
 from protocol.wire import read_int32, OP_MSG, OP_COMPRESSED
 from protocol.compression import unpack_op_compressed
 from protocol.op_msg import parse_op_msg
+from logging_tools.inspect_config import INSPECTOR_MODE
 
 logger = logging.getLogger("MongoProxy")
-
-ENABLE_DEMO_REWRITE = True
-DEMO_REWRITE_FIELD = "name"
-DEMO_REWRITE_FROM = "proxy_check"
-DEMO_REWRITE_TO = "proxy_check_modified"
-
-# Режимы:
-# "verbose"  - подробное логирование из inspector.py
-# "summary"  - короткое и понятное логирование из logger_inspector.py
-INSPECTOR_MODE = "summary"
-
 
 if INSPECTOR_MODE == "verbose":
     from logging_tools.big_inspector import summarize_parsed_op_msg
