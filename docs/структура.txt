@@ -1,0 +1,49 @@
+
+onion_enc_mongo
+├─ app
+│  ├─ crypto_layers
+│  │  ├─ crypto_det.py
+│  │  ├─ crypto_det_config.py
+│  │  ├─ crypto_hom.py
+│  │  ├─ crypto_hom_config.py
+│  │  ├─ crypto_hope.py
+│  │  └─ crypto_hope_config.py
+│  ├─ logging_tools
+│  │  ├─ big_inspector.py
+│  │  ├─ inspection.py
+│  │  ├─ inspect_config.py
+│  │  └─ small_inspector.py
+│  ├─ main.py
+│  ├─ protocol
+│  │  ├─ compression.py
+│  │  ├─ op_msg.py
+│  │  └─ wire.py
+│  ├─ proxy
+│  │  └─ proxy.py
+│  └─ transform
+│     ├─ collection_field_info
+│     │  ├─ field_config.py
+│     │  ├─ field_policy.py
+│     │  └─ field_policy_access.py
+│     ├─ layers
+│     │  ├─ transformer_det.py
+│     │  ├─ transformer_hom.py
+│     │  └─ transformer_hope.py
+│     └─ transformer.py
+├─ docs
+│  ├─ AES_GCM_SIV.md
+│  ├─ README_AES_GCM_SIV.md
+│  ├─ README_HOM_PAILLER.md
+│  ├─ README_HOPE.md
+│  ├─ README_mongo_proxy.md
+│  └─ структура
+├─ requirements.txt
+├─ scripts
+│  ├─ check.py
+│  ├─ check_det.py
+│  ├─ check_det_mongo.py
+│  ├─ check_hom.py
+│  ├─ check_hom_mongo.py
+│  ├─ check_hope.py
+│  └─ check_hope_mongo.py
+└─ tests
