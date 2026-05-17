@@ -1,22 +1,26 @@
 import base64
+# Decimal сохраняет точность
 from decimal import Decimal
 from typing import Any
 
 from cryptography.hazmat.primitives import hashes, hmac
 from cryptography.hazmat.primitives.ciphers.aead import AESGCMSIV
 
-from crypto.crypto_config import DET_MASTER_KEY
+from crypto_layers.crypto_det_config import DET_MASTER_KEY
 from transform.collection_field_info.field_policy import FieldPolicy, FieldType
 
 
 def serialize_value(value: Any, field_type: FieldType) -> bytes:
     """
-    ОДНОТИПНО ОДИНАКОВО сериализовать (представить) значение поля перед DET-шифрованием.
+    Перед шифрованием любое значение необходимо привести к единому бинарному представлению.
+    Это требуется потому, что криптографические алгоритмы работают исключительно с байтами.
     """
     if field_type == FieldType.STRING:
         if not isinstance(value, str):
             raise TypeError(f"Expected str for STRING field, got {type(value).__name__}")
         return value.encode("utf-8")
+
+    # используются префиксы i:, f:, d: иначе разные типы данных могли бы давать одинаковый шифротекст.
 
     if field_type == FieldType.NUMBER:
         if isinstance(value, bool):
@@ -38,7 +42,7 @@ def serialize_value(value: Any, field_type: FieldType) -> bytes:
 
 def deserialize_value(data: bytes, field_type: FieldType) -> Any:
     """
-    Обратная операция к serialize_value.
+    Обратная операция к serialize_value. 
     """
     if field_type == FieldType.STRING:
         return data.decode("utf-8")
@@ -62,16 +66,13 @@ def deserialize_value(data: bytes, field_type: FieldType) -> Any:
 
 def build_det_aad(db_name: str, collection_name: str, logical_field_name: str) -> bytes:
     """
-    Это привязка ciphertext к контексту:
-
-    имя базы
-    имя коллекции
-    логическое имя поля
+    Это привязка ciphertext к контексту - Additional Authenticated Data: имя базы, имя коллекции, логическое имя поля
     тип слоя (det)
 
-    Благодаря этому одинаковое значение в разных полях не становится полностью взаимозаменяемым.
-
-    #TODO пример
+    Благодаря AAD одинаковые значения, например "Alice", в разных полях:
+    users.name
+    users.login
+    не будут взаимозаменяемыми.
     """
     return f"{db_name}:{collection_name}:{logical_field_name}:det".encode("utf-8")
 
@@ -101,6 +102,7 @@ def encrypt_det(
     ciphertext = cipher.encrypt(nonce, plaintext, aad)
 
     blob = nonce + ciphertext
+    #TODO зачем тут decode("ascii")
     return base64.urlsafe_b64encode(blob).decode("ascii")
 
 

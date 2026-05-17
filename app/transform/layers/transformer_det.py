@@ -9,7 +9,7 @@ from transform.collection_field_info.field_policy_access import (
     get_det_field_name,
     parse_physical_field_name,
 )
-from crypto.crypto_det import encrypt_det, decrypt_det
+from crypto_layers.crypto_det import encrypt_det, decrypt_det
 
 logger = logging.getLogger("MongoProxy")
 

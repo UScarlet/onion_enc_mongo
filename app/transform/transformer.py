@@ -12,14 +12,23 @@ from transform.layers.transformer_det import (
     transform_client_parsed_op_msg_with_det,
     transform_server_parsed_op_msg_with_det,
 )
+from transform.layers.transformer_hom import (
+    transform_client_parsed_op_msg_with_hom,
+)
+from transform.layers.transformer_hope import (
+    transform_client_parsed_op_msg_with_hope,
+)
+from transform.layers.transformer_hom import transform_client_parsed_op_msg_with_hom
+from transform.layers.transformer_hope import transform_client_parsed_op_msg_with_hope # Добавлено
+from transform.layers.transformer_det import (
+    transform_client_parsed_op_msg_with_det,
+    transform_server_parsed_op_msg_with_det,
+)
 
 logger = logging.getLogger("MongoProxy")
 
 
 def _rebuild_op_msg_from_parsed(parsed: dict) -> bytes:
-    """
-    Собрать бинарное OP_MSG-сообщение обратно из parsed-структуры.
-    """
     return build_op_msg(
         request_id=parsed["header"][0],
         response_to=parsed["header"][1],
@@ -29,20 +38,34 @@ def _rebuild_op_msg_from_parsed(parsed: dict) -> bytes:
     )
 
 
+def _apply_client_layers(parsed: dict) -> tuple[dict, bool]:
+    """
+    Порядок слоёв для client->server:
+    1. HOM augment (добавляет поля __hom)
+    2. HOPE augment (добавляет поля __hope)
+    3. DET rewrite (переписывает оригинальные поля и условия поиска)
+    
+    Аугментирующие слои (HOM и HOPE) должны отрабатывать ДО DET-слоя, 
+    так как DET-слой затирает оригинальный открытый текст.
+    """
+    changed_any = False
+    current = parsed
+
+    # 1. Применяем слой HOM
+    current, changed_hom = transform_client_parsed_op_msg_with_hom(current)
+    changed_any = changed_any or changed_hom
+
+    # 2. Применяем слой HOPE
+    current, changed_hope = transform_client_parsed_op_msg_with_hope(current)
+    changed_any = changed_any or changed_hope
+
+    # 3. Применяем слой DET
+    current, changed_det = transform_client_parsed_op_msg_with_det(current)
+    changed_any = changed_any or changed_det
+
+    return current, changed_any
+
 def transform_message(raw_msg: bytes, direction: str) -> bytes:
-    """
-    Общая точка входа для преобразования MongoDB-сообщения.
-
-    Сейчас:
-    - поддерживается только DET-слой
-    - логика DET вынесена в transform/layers/transformer_det.py
-
-    transformer.py отвечает только за:
-    - разбор raw-сообщения
-    - dispatch по направлению
-    - rebuild сообщения
-    - работу с OP_COMPRESSED
-    """
     try:
         opcode = read_int32(raw_msg, 12)
 
@@ -53,7 +76,7 @@ def transform_message(raw_msg: bytes, direction: str) -> bytes:
             parsed = parse_op_msg(raw_msg)
 
             if direction == "client->server":
-                new_parsed, changed = transform_client_parsed_op_msg_with_det(parsed)
+                new_parsed, changed = _apply_client_layers(parsed)
             else:
                 new_parsed, changed = transform_server_parsed_op_msg_with_det(parsed)
 
@@ -78,7 +101,7 @@ def transform_message(raw_msg: bytes, direction: str) -> bytes:
             parsed = parse_op_msg(inner_message)
 
             if direction == "client->server":
-                new_parsed, changed = transform_client_parsed_op_msg_with_det(parsed)
+                new_parsed, changed = _apply_client_layers(parsed)
             else:
                 new_parsed, changed = transform_server_parsed_op_msg_with_det(parsed)
 
