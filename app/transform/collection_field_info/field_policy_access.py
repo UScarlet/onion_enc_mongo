@@ -2,38 +2,49 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
-from transform.collection_field_info.field_config import FIELD_POLICIES
+from transform.collection_field_info.db_cmd_field_config import FIELD_POLICIES
 
 """
 Функции доступа к политике защищаемых полей.
 
-Этот модуль предоставляет служебный API для работы с реестром
+Это модуль для работы с реестром
 FIELD_POLICIES, объявленным в field_config.py.
 
 Основные задачи модуля:
-- построение канонического ключа поля;
+- построение канонического (общего вида) ключа поля (ключ в бд) по имени базы, коллекции и поля;
 - получение политики защиты по имени базы, коллекции и поля;
 - проверка, является ли поле защищаемым;
-- получение имени физического поля для нужного слоя
-  (DET, HOPE, HOM);
-- разбор физического имени поля обратно в пару
-  (логическое имя, слой).
+- получение имени физического поля для нужного слоя (DET, HOPE, HOM);
+- разбор физического имени поля обратно в пару (логическое имя, слой).
 
-Таким образом, field_policy.py отделяет прикладную логику работы
-с конфигурацией полей от самой конфигурации и позволяет другим
-модулям проекта (например, transformer_det.py и crypto_det.py)
+позволяет другим модулям проекта 
+(например, transformer_det.py и crypto_det.py)
 получать информацию о защищаемых полях через единый интерфейс.
 """
 
 from typing import Optional
 
-from transform.collection_field_info.field_config import FIELD_POLICIES
+from transform.collection_field_info.db_cmd_field_config import FIELD_POLICIES
 from transform.collection_field_info.field_policy import FieldPolicy
 
 
 def make_field_key(db_name: str, collection_name: str, field_name: str) -> str:
     """
     Собрать канонический ключ поля для реестра политик.
+    В проекте с MongoDB может быть много разных баз данных 
+    (например, shop_db, test_db), внутри них - много коллекций 
+    (users, orders), а внутри коллекций - полей с одинаковыми 
+    именами (name, salary). 
+    допустим, в коллекции users имя name нужно шифровать,
+    а в коллекции products имя name товара скрывать не требуется
+
+    Если база company, коллекция employees, а поле salary, 
+    то канонический ключ:
+    "company.employees.salary"
+    Этот ключ используется как уникальный адрес (ID) 
+    в общем словаре настроек. По нему понятно, 
+    какие именно правила шифрования применить 
+    к данной конкретной ячейке данных.
     """
     return f"{db_name}.{collection_name}.{field_name}"
 
@@ -44,7 +55,7 @@ def get_field_policy(
     field_name: str,
 ) -> Optional[FieldPolicy]:
     """
-    Получить политику поля или None, если поле не защищается.
+    Получить политику поля      или     None, если поле не защищается.
     """
     key = make_field_key(db_name, collection_name, field_name)
     return FIELD_POLICIES.get(key)

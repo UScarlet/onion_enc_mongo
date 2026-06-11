@@ -5,8 +5,8 @@ from Crypto.Util.number import inverse
 
 from transform.collection_field_info.field_policy_access import get_field_policy
 from transform.collection_field_info.field_policy import FieldType
-from crypto.crypto_hope import encrypt_hope, encrypt_hope_raw, _normalize_number
-from crypto.crypto_hope_config import HOPE_PUBLIC_KEY, HOPE_COMPARE_KEY
+from crypto_layers.crypto_hope import encrypt_hope, encrypt_hope_raw, _normalize_number
+from crypto_layers.crypto_hope_config import HOPE_PUBLIC_KEY, HOPE_COMPARE_KEY
 
 logger = logging.getLogger("MongoProxy")
 

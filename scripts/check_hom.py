@@ -10,7 +10,7 @@
    (Paillier является вероятностной, а не детерминированной криптосистемой);
 6. что гомоморфное сложение ciphertext корректно работает.
 """
-#TODO публичный приватный ключ господи поменяй
+
 from pathlib import Path
 import sys
 
@@ -42,8 +42,8 @@ def _assert(condition: bool, message: str) -> None:
 def main() -> None:
     _print_section("1. Проверка загрузки HOM-ключей")
     print("HOM public key n bits:", HOM_PUBLIC_KEY.n.bit_length())
-    _assert(HOM_PUBLIC_KEY is not None, "Публичный ключ Paillier загружен")
-    _assert(HOM_PRIVATE_KEY is not None, "Приватный ключ Paillier загружен")
+    _assert(HOM_PUBLIC_KEY is not None, "Открытый ключ Paillier загружен")
+    _assert(HOM_PRIVATE_KEY is not None, "Закрытый ключ Paillier загружен")
 
     _print_section("2. Проверка наличия политик числовых полей")
     policy_salary = get_field_policy("test_proxy", "test", "salary")

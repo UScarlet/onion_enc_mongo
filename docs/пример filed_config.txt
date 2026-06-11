@@ -1,0 +1,31 @@
+"""
+Реестр конфигурации криптографического прокси-сервера.
+Содержит спецификации команд и декларативные политики полей.
+"""
+from transform.collection_field_info.field_policy import FieldPolicy, FieldType
+
+# Спецификация поддерживаемых команд MongoDB Wire Protocol
+SUPPORTED_CLIENT_COMMANDS = {
+    "insert": "insert",
+    "find": "find",
+    "update": "update",
+    "delete": "delete"
+}
+
+# Реестр криптографических политик полей СУБД
+FIELD_POLICIES: dict[str, FieldPolicy] = {
+    "test_proxy.test.name": FieldPolicy(
+        logical_name="name",
+        field_type=FieldType.STRING,
+        det_enabled=True,
+    ),
+    "test_proxy.test.salary": FieldPolicy(
+        logical_name="salary",
+        field_type=FieldType.NUMBER,
+        det_enabled=True,
+        hope_enabled=True,
+        hom_enabled=True,
+    ),
+    # Ты можешь добавлять сюда любые другие пространства имен, например:
+    # "production_db.employees.salary": FieldPolicy(...)
+}

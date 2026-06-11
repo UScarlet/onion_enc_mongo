@@ -9,6 +9,11 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCMSIV
 from crypto_layers.crypto_det_config import DET_MASTER_KEY
 from transform.collection_field_info.field_policy import FieldPolicy, FieldType
 
+'''Сериализация здесь - перевод объектов Python любого типа (str, int, float, Decimal) 
+в единое байтовое представление, а десериализация - это обратное восстановление исходного типа объекта из байтов.
+'''
+
+
 
 def serialize_value(value: Any, field_type: FieldType) -> bytes:
     """
@@ -90,7 +95,7 @@ def encrypt_det(
     plaintext = serialize_value(value, policy.field_type)
     aad = build_det_aad(db_name, collection_name, policy.logical_name)
 
-    # Построить детерминированный nonce из aad и plaintext.
+    # Построить детерминированную nonce из aad и plaintext.
     h = hmac.HMAC(DET_MASTER_KEY, hashes.SHA256())
     h.update(aad)
     h.update(b"\x00")
@@ -102,7 +107,14 @@ def encrypt_det(
     ciphertext = cipher.encrypt(nonce, plaintext, aad)
 
     blob = nonce + ciphertext
-    #TODO зачем тут decode("ascii")
+    """зачем тут decode("ascii")
+    Преобразуем байтовую строку Base64 в текстовую строку.
+    Это необходимо, чтобы библиотека bson записала зашифрованные данные 
+    в документ MongoDB как строку, а не как сырой тип Binary (Bindata).
+
+    строковый тип: это нужно чтобы работал find: механизмы сравнения строк в СУБД NoSQL оптимизированы для работы со строками обычно
+    base64: Строковый Base64 текст гарантированно не содержит служебных управляющих байтов (таких как нулевой байт \x00), которые могли бы оборвать чтение парсинг при пересылке пакета OP_MSG
+    """
     return base64.urlsafe_b64encode(blob).decode("ascii")
 
 

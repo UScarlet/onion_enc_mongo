@@ -7,7 +7,7 @@ from phe import paillier
 
 
 load_dotenv()
-
+#TODO убрать значения по умолчанию
 HOM_KEY_BITS = int(os.getenv("HOM_KEY_BITS", "2048"))
 HOM_KEYS_DIR = Path(os.getenv("HOM_KEYS_DIR", "keys"))
 

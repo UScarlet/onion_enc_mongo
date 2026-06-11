@@ -15,7 +15,6 @@ from protocol.wire import (
     read_cstring,
 )
 
-# TODO найди в прошлом фацле описание формата этого - какие тамм поля, как этим пользоваться
 def parse_op_msg(message: bytes) -> dict:
     """
     Разобрать сообщение формата OP_MSG.

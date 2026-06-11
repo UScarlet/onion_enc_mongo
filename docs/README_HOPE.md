@@ -103,7 +103,7 @@ $$x^{n\cdot\phi(n)} \equiv 1 \pmod{n^2}$$
 $$\left( (r_A \cdot r_B^{-1})^{n\phi(n)} \right)^{\eta_0 \zeta} \equiv (1)^{\eta_0 \zeta} \equiv 1 \pmod{n^2}$$
 
 **3. Линеаризация полезной нагрузки**
-#TODO это не L - что это
+#Что это
 Рассмотрим левую часть выражения, содержащую разность открытых текстов. Используя бином Ньютона, для любого целого $k$ справедливо тождество Пэйе: $(1+n)^k \equiv 1 + k\cdot n \pmod{n^2}$.
 Положив $k = (m_A - m_B) \cdot \eta_0 \cdot \phi(n) \cdot \zeta$, получаем:
 $$c_{diff}^{ck_0} \equiv 1 + n \cdot \left[ \eta_0 \cdot \phi(n) \cdot \zeta \cdot (m_A - m_B) \right] \pmod{n^2}$$

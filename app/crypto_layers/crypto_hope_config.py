@@ -47,8 +47,8 @@ def generate_hope_keys(bits: int = 2048) -> dict:
     ck1 = (eta1 * phi_zeta_inv) % n
     
     return {
-        "pk": n,               # Публичный ключ (модуль)
-        "sk": phi_n,           # Приватный #TODO ключ 
+        "pk": n,               # Открытый ключ (модуль)
+        "sk": phi_n,           # Закрытый ключ 
         "ck0": ck0,            # Часть 0 ключа сравнения
         "ck1": ck1             # Часть 1 ключа сравнения
     }

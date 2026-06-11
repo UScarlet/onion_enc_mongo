@@ -10,6 +10,18 @@ field_logic.py обрабатывает эти поля (имена зашифр
 """
 from transform.collection_field_info.field_policy import FieldPolicy, FieldType
 
+#TODO  какой-то странный формат, надо будет подумать как исправить
+SUPPORTED_CLIENT_COMMANDS = {
+    "insert": "insert",
+    "find": "find",
+    "update": "update",
+    "delete": "delete",
+    "findAndModify": "findAndModify",
+    "aggregate": "aggregate",
+    "count": "count",
+    "distinct": "distinct"
+}
+
 FIELD_POLICIES: dict[str, FieldPolicy] = {
     "test_proxy.test.name": FieldPolicy(
         logical_name="name",
