@@ -3,7 +3,19 @@ import logging
 
 from protocol.wire import read_full_message, ProtocolError
 from logging_tools.inspection import inspect_message
-from transform.transformer import transform_message
+import os
+from dotenv import load_dotenv
+
+
+
+load_dotenv()
+ENCRYPT = os.getenv("ENCRYPT")
+
+
+if ENCRYPT == "ON":
+    from transform.transformer import transform_message
+else:
+    from transform.transformer1 import transform_message
 
 logger = logging.getLogger("MongoProxy")
 

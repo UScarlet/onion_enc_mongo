@@ -17,6 +17,10 @@ else:
         f"Use 'verbose' or 'summary'."
     )
 
+ENABLE_DEMO_REWRITE = True
+DEMO_REWRITE_FIELD = "name"
+DEMO_REWRITE_FROM = "proxy_check"
+DEMO_REWRITE_TO = "proxy_check_modified"
 
 def inspect_message(raw_msg: bytes, direction: str, peer_label: str = "") -> None:
     """
